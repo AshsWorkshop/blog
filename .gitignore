@@ -21,7 +21,5 @@ yarn-error.log*
 
 # Redundant blog files
 /blog/**
-**/authors.yml
-**/tags.yml
-!/blog/authors.yml
-!/blog/tags.yml
+!/blog/**.md
+!/blog/**.mdx

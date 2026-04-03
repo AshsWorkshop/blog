@@ -10,17 +10,31 @@ const expressiveCodeOptions: ExpressiveCode.RehypeExpressiveCodeOptions = {
 
 };
 
+/**
+ * The mutable parameters of the blog.
+ */
 interface BlogParams {
+  /** Plugin identifier. */
   id: string;
+  /** Title of the blog page. */
   title: string;
+  /** Description of the blog page. */
   desc: string;
+  /** Number of recent posts to show in the sidebar. */
   sidebarCount: number;
 }
 
+/**
+ * Constructs the options for a docusaurus blog.
+ * 
+ * @param params The mutable parameters of the blog. If not present, defaults
+ *               to the main blog parameters.
+ * @returns The blog options.
+ */
 function constructBlog(params?: BlogParams): Blog.Options {
   return {
     id: params?.id ?? 'main',
-    path: params?.id ?? 'blog',
+    path: params == null ? 'blog' : `sections/${params.id}`,
 
     blogTitle: params?.title ?? 'Ash\'s Workshop Debrief',
     blogDescription: params?.desc ?? 'A place for my random assortment of work',
@@ -62,6 +76,13 @@ function constructBlog(params?: BlogParams): Blog.Options {
   } satisfies Blog.Options;
 }
 
+/**
+ * Constructs a blog plugin with its associated options.
+ * 
+ * @param params The mutable parameters of the blog. If not present, defaults
+ *               to the main blog parameters.
+ * @returns The blog plugin with its configured options.
+ */
 function constructBlogPlugin(params?: BlogParams): [string, Blog.Options] {
   return [
       '@docusaurus/plugin-content-blog',
