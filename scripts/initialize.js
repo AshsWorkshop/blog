@@ -53,7 +53,6 @@ fs.readdirSync(MAIN_BLOG_PATH, { withFileTypes: true, encoding: 'utf-8' }).forEa
     
     // Merge section tags
     if (fs.existsSync(sectionTagsPath = path.join(sectionPath, BLOG_TAGS_FILE))) {
-        // TODO: See if permalink is necessary
         Object.assign(tags, parseYaml(sectionTagsPath));
     }
 
