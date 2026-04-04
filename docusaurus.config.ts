@@ -1,3 +1,6 @@
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import * as yaml from 'yaml';
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
@@ -90,6 +93,35 @@ function constructBlogPlugin(params?: BlogParams): [string, Blog.Options] {
   ];
 }
 
+/**
+ * Constructs all blog plugins for the site by looping through the 'sections'
+ * directory.
+ * 
+ * @returns A list of blog plugins with their configured options.
+ */
+function getBlogPlugins(): [string, Blog.Options][] {
+  const result: [string, Blog.Options][] = [];
+
+  // Loop through sections
+  fs.readdirSync(
+    path.join(process.cwd(), 'sections'),
+    { withFileTypes: true, encoding: 'utf-8'}
+  ).forEach((sectionId) => {
+    // Make sure it is a directory
+    if (!sectionId.isDirectory()) return;
+
+    // Read section meta
+    const sectionMeta = path.join(sectionId.parentPath, sectionId.name, '.section.yml');
+    if (fs.existsSync(sectionMeta)) {
+      const params: BlogParams = yaml.parse(fs.readFileSync(sectionMeta, { encoding: 'utf-8' }))['meta'];
+      params.id = sectionId.name;
+      result.push(constructBlogPlugin(params));
+    }
+  });
+
+  return result;
+}
+
 const config: Config = {
   title: 'Ash\'s Workshop Debrief',
   tagline: 'A place for a random assortment of hobbies.',
@@ -130,20 +162,7 @@ const config: Config = {
     ]
   ],
 
-  plugins: [
-    constructBlogPlugin({
-      id: 'programming',
-      title: 'Ash\'s Programming Workshop',
-      desc: 'My random programming work',
-      sidebarCount: 4
-    }),
-    constructBlogPlugin({
-      id: 'minecraft',
-      title: 'Ash\'s Minecraft Workshop',
-      desc: 'My random Minecraft work',
-      sidebarCount: 4
-    })
-  ],
+  plugins: getBlogPlugins(),
 
   themeConfig: {
     colorMode: {
