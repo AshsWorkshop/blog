@@ -8,6 +8,7 @@ import type * as Blog from '@docusaurus/plugin-content-blog';
 import type * as Theme from '@docusaurus/theme-classic';
 import type * as ExpressiveCode from 'rehype-expressive-code';
 import rehypeExpressiveCode from 'rehype-expressive-code';
+import * as common from './scripts/common';
 
 const expressiveCodeOptions: ExpressiveCode.RehypeExpressiveCodeOptions = {
 
@@ -69,7 +70,7 @@ function constructBlog(params?: BlogParams): Blog.Options {
     sortPosts: 'descending',
 
     showLastUpdateAuthor: false,
-    showLastUpdateTime: false,
+    showLastUpdateTime: true,
 
     onInlineTags: 'throw',        
     onInlineAuthors: 'throw',
@@ -104,16 +105,16 @@ function getBlogPlugins(): [string, Blog.Options][] {
 
   // Loop through sections
   fs.readdirSync(
-    path.join(process.cwd(), 'sections'),
+    common.SECTIONS_PATH,
     { withFileTypes: true, encoding: 'utf-8'}
   ).forEach((sectionId) => {
     // Make sure it is a directory
     if (!sectionId.isDirectory()) return;
 
     // Read section meta
-    const sectionMeta = path.join(sectionId.parentPath, sectionId.name, '.section.yml');
+    const sectionMeta = path.join(sectionId.parentPath, sectionId.name, common.SECTIONS_META_FILE);
     if (fs.existsSync(sectionMeta)) {
-      const params: BlogParams = yaml.parse(fs.readFileSync(sectionMeta, { encoding: 'utf-8' }))['meta'];
+      const params: BlogParams = common.parseYaml(sectionMeta)['meta'];
       params.id = sectionId.name;
       result.push(constructBlogPlugin(params));
     }
