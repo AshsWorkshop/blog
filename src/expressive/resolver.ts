@@ -18,7 +18,10 @@ import { tmpdir } from 'node:os';
 import * as path from 'node:path';
 import { definePlugin, ExpressiveCodeHookContext, type ExpressiveCodePlugin } from 'rehype-expressive-code';
 
-const DEFAULT_SEPARATOR = ' ';
+type ErrorHandlerOption = 'ignore' | 'log' | 'warn' | 'throw';
+
+const DEFAULT_SEPARATOR: string = ' ';
+const DEFAULT_ERROR_HANDLER: ErrorHandlerOption = 'warn';
 const RESOLVER_REGEX: RegExp = /^~>\[([^\[\]\(\)@ ]*)(?:@([^\[\]\(\)@ ]+))?\](?:\[((?:[^\[\]\(\)= ]+=[^\[\]\(\)= ]+ ?)*)\])?\(([^\[\]\(\)]+)\)$/;
 
 /**
@@ -45,19 +48,18 @@ export interface ResolverSettings {
 }
 
 /**
- * The type of the remote to pull the content from. Takes in the
- * location from the remote settings and returns a local path
- * to access the content from.
+ * The type of the remote to pull the content from.
  */
-export type RemoteType = {
+export type RemoteType<RemoteConfiguration> = {
     /**
      * Sets up the remote on the local file system to access
      * the content from.
      * 
      * @param remote A string to be parsed.
+     * @param config The configuration for the remote.
      * @returns The path of the remote on the local file system.
      */
-    setup: (remote: string) => string;
+    setup: (remote: string, config: RemoteConfiguration) => string;
     /**
      * Cleans up any lingering files from the remote on the
      * local file system. This should validate that any files
@@ -67,65 +69,13 @@ export type RemoteType = {
      * @param path The path on the local file system.
      */
     teardown: (path: string) => void;
-}
-
-/**
- * The settings for a remote.
- */
-export interface RemoteSettings {
-    /**
-     * The type of the remote to pull the content from.
-     */
-    type: RemoteType;
-    /**
-     * The location of the remote formatted for the remote
-     * type.
-     */
-    location: string;
-    /**
-     * A map of resolver keys to their settings. If the
-     * resolver key is not specified, then the path
-     * elements will be treated as the path.
-     */
-    resolvers?: {[key: string]: ResolverSettings};
-}
-
-/**
- * The resolved settings for a remote.
- */
-interface ResolvedRemoteSettings extends Required<RemoteSettings> {
-    /**
-     * The resolved location of the remote on the local filesystem.
-     */
-    resolvedLocation: string;
-    resolvers: {[key: string]: Required<ResolverSettings>};
-}
-
-/**
- * The options for the resolver plugin.
- */
-export interface ResolverPluginOptions {
-    /**
-     * A map of remote names to their settings. If a
-     * remote name is not specified, then the path
-     * elements will be treated as the path from
-     * where the process was executed.
-     */
-    remotes?: {[name: string]: RemoteSettings};
-}
-
-/**
- * The resolved options for the resolver plugin.
- */
-interface ResolvedPluginOptions extends ResolverPluginOptions {
-    remotes: {[name: string]: ResolvedRemoteSettings};
-}
+};
 
 /**
  * A remote from the local filesystem.
  */
-export const REMOTE_LOCAL: RemoteType = {
-    setup: (remote: string) => {
+export const REMOTE_LOCAL: RemoteType<undefined> = {
+    setup: (remote: string, _config: undefined) => {
         // Validate that location exists and is directory
         if (!fs.statSync(remote).isDirectory()) {
             throw new TypeError(`Location "${remote}" is not a directory`);
@@ -133,19 +83,35 @@ export const REMOTE_LOCAL: RemoteType = {
         return remote;
     },
     // Nothing to do
-    teardown: (location) => {}
+    teardown: (_path: string) => {}
+};
+
+/**
+ * Configuration for the git remote.
+ */
+export type RemoteGitConfiguration = {
+    /**
+     * The branch to checkout the git repository to.
+     */
+    branch?: string;
 };
 
 /**
  * A remote from a git repository.
  */
-export const REMOTE_GIT: RemoteType = {
-    setup: (remote: string) => {
+export const REMOTE_GIT: RemoteType<RemoteGitConfiguration> = {
+    setup: (remote: string, config: RemoteGitConfiguration) => {
         // Create tmp directory to write to
         const tmpDir: string = fs.mkdtempSync(path.join(tmpdir(), 'remote-git-'))
 
         // Pull repository
         chp.execSync(`git clone ${remote} ${tmpDir}`);
+        // Update branch appropriately
+        if (config.branch != null) {
+            chp.execSync(`cd ${tmpDir} && git checkout ${config.branch}`);
+        } else {
+            config.branch = chp.execSync(`cd ${tmpDir} && git rev-parse --abbrev-ref HEAD`, { encoding: 'utf-8' }).trim();
+        }
 
         return tmpDir;
     },
@@ -158,11 +124,144 @@ export const REMOTE_GIT: RemoteType = {
     }
 };
 
-const DEFAULT_REMOTE: ResolvedRemoteSettings = {
+/**
+ * The settings for a remote.
+ */
+export interface RemoteSettings<RemoteConfiguration> {
+    /**
+     * The type of the remote to pull the content from.
+     */
+    type: RemoteType<RemoteConfiguration>;
+    /**
+     * The location of the remote formatted for the remote
+     * type.
+     */
+    location: string;
+    /**
+     * The configuration of the remote type.
+     */
+    config?: RemoteConfiguration;
+    /**
+     * A map of resolver keys to their settings. If the
+     * resolver key is not specified, then the path
+     * elements will be treated as the path.
+     */
+    resolvers?: {[key: string]: ResolverSettings};
+}
+
+/**
+ * The resolved settings for a remote.
+ */
+interface ResolvedRemoteSettings<RemoteConfiguration> extends RemoteSettings<RemoteConfiguration> {
+    /**
+     * The resolved location of the remote on the local filesystem.
+     */
+    resolvedLocation: string;
+    resolvers: {[key: string]: Required<ResolverSettings>};
+}
+
+/**
+ * The raw reference config obtained when parsing.
+ */
+export type RawReferenceConfig = {[key: string]: string[]};
+
+/**
+ * A plugin on what the resolver should do during its lifecycle.
+ */
+export type ResolverPlugin<ConfigData> = {
+
+    /**
+     * Builds the config from the options resolver reference. Otherwise,
+     * returns null and will not attach its hooks to run.
+     * 
+     * @param config The parsed configuration from the resolver reference.
+     * @returns The configuration data, or null.
+     */
+    build: (config: RawReferenceConfig) => ConfigData | null;
+
+    /**
+     * The listeners to apply during the resolver reference lifecycle.
+     */
+    hooks: {
+        /**
+         * Runs after the remote has been resolved.
+         * 
+         * @param config The resolver plugin config.
+         * @param remote The remote settings.
+         */
+        afterRemote?: (config: ConfigData, remote: ResolvedRemoteSettings<unknown>) => void;
+        /**
+         * Modifies the data of the content.
+         * 
+         * @param config The resolver plugin config.
+         * @param data The data to modify.
+         * @returns The modified data.
+         */
+        modifyData?: (config: ConfigData, data: string[]) => string[];
+    };
+};
+
+/**
+ * The options for the resolver plugin.
+ */
+export interface ResolverPluginOptions {
+    /**
+     * A map of remote names to their settings. If a
+     * remote name is not specified, then the path
+     * elements will be treated as the path from
+     * where the process was executed.
+     */
+    remotes?: {[name: string]: RemoteSettings<unknown>};
+    /**
+     * Additional plugins to apply during the resolver lifecycle.
+     */
+    plugins?: ResolverPlugin<unknown>[];
+    /**
+     * The behavior of the plugin when it finds references it is
+     * unable to resolve.
+     */
+    onUnresolvedReferences?: ErrorHandlerOption;
+}
+
+/**
+ * The resolved options for the resolver plugin.
+ */
+interface ResolvedPluginOptions extends Required<ResolverPluginOptions> {
+    remotes: {[name: string]: ResolvedRemoteSettings<unknown>};
+}
+
+const DEFAULT_PLUGINS: ResolverPlugin<unknown>[] = [
+    // Git commit lock
+    {
+        build: (config: RawReferenceConfig) => 'git-commit' in config ? config['git-commit'][0] : '',
+        hooks: {
+            afterRemote: function (config: string, remote: ResolvedRemoteSettings<unknown>): void {
+                if (typeof remote.config === 'object' && 'branch' in remote.config) {
+                    // Get commit to checkout to
+                    const commit: string = config ? config : (remote as ResolvedRemoteSettings<RemoteGitConfiguration>).config.branch;
+                    
+                    // Checkout commit
+                    chp.execSync(`cd ${remote.resolvedLocation} && git checkout ${commit}`);
+                }
+            }
+        }
+    } satisfies ResolverPlugin<string>
+];
+
+const DEFAULT_REMOTE: ResolvedRemoteSettings<undefined> = {
     type: REMOTE_LOCAL,
     location: process.cwd(),
     resolvedLocation: process.cwd(),
     resolvers: {}
+};
+
+const ERROR_HANDLERS: {[key in ErrorHandlerOption]: (message: string, errorType: string) => void} = {
+    ignore: (_message: string, _errorType: string) => {},
+    log: (message: string, errorType: string) => console.log(`${errorType}: ${message}`),
+    warn: (message: string, errorType: string) => process.emitWarning(message, errorType),
+    throw: (message: string, errorType: string) => {
+        throw new Error(`${errorType}: ${message}`);
+    }
 };
 
 /**
@@ -175,10 +274,13 @@ const DEFAULT_REMOTE: ResolvedRemoteSettings = {
  */
 export function expressiveCodePluginResolver(options: ResolverPluginOptions): ExpressiveCodePlugin {
     // Resolve unset properties in options
+    if (options.onUnresolvedReferences == null) options.onUnresolvedReferences = DEFAULT_ERROR_HANDLER;
+    if (options.plugins == null) options.plugins = [];
+    options.plugins = DEFAULT_PLUGINS.concat(options.plugins);
     if (options.remotes == null) options.remotes = {};
     for (const remoteSettings of Object.values(options.remotes)) {
         // Resolve remote to filesystem
-        (remoteSettings as ResolvedRemoteSettings).resolvedLocation = remoteSettings.type.setup(remoteSettings.location);
+        (remoteSettings as ResolvedRemoteSettings<unknown>).resolvedLocation = remoteSettings.type.setup(remoteSettings.location, remoteSettings.config);
 
         // Resolve unset resolvers in remote
         if (remoteSettings.resolvers == null) remoteSettings.resolvers = {};
@@ -189,6 +291,9 @@ export function expressiveCodePluginResolver(options: ResolverPluginOptions): Ex
     }
     const opts: ResolvedPluginOptions = options as ResolvedPluginOptions;
 
+    /**
+     * Cleans up any lingering traces of the plugin on exit.
+     */
     function teardown() {
         for (const remoteSettings of Object.values(opts.remotes)) {
             // Make sure we're only doing this once, though this may not
@@ -215,8 +320,8 @@ export function expressiveCodePluginResolver(options: ResolverPluginOptions): Ex
                     const match: RegExpMatchArray = line.text.match(RESOLVER_REGEX);
                     if (!match) continue;
 
-                    // Extract config (TODO: Figure out what to do with it)
-                    const config: {[key: string]: string[]} = {};
+                    // Build plugins
+                    const config: RawReferenceConfig = {};
                     if (match[3]) {
                         match[3].split(' ').forEach((pair: string) => {
                             const [key, value] = pair.split('=');
@@ -224,9 +329,15 @@ export function expressiveCodePluginResolver(options: ResolverPluginOptions): Ex
                             config[key].push(value);
                         });
                     }
+                    const plugins: [ResolverPlugin<unknown>, unknown][] = [];
+                    for (const plugin of opts.plugins) {
+                        const pluginConfig: unknown | null = plugin.build(config);
+                        if (pluginConfig != null) plugins.push([plugin, pluginConfig]);
+                    }
 
                     // Get remote
-                    const remote: ResolvedRemoteSettings = match[2] && match[2] in opts.remotes ? opts[match[2]] : DEFAULT_REMOTE;
+                    const remote: ResolvedRemoteSettings<unknown> = match[2] && match[2] in opts.remotes ? opts[match[2]] : DEFAULT_REMOTE;
+                    plugins.forEach(([plugin, pluginConfig]) => { if (plugin.hooks.afterRemote != null) plugin.hooks.afterRemote(pluginConfig, remote)});
 
                     // Resolve locations
                     const locations: string[] = [];
@@ -263,9 +374,11 @@ export function expressiveCodePluginResolver(options: ResolverPluginOptions): Ex
                         foundFile = true;
                         
                         // Read file
-                        const data: string[] = fs.readFileSync(
+                        let data: string[] = fs.readFileSync(
                             location, { encoding: 'utf-8' }
                         ).trim().split('\n');
+
+                        plugins.forEach(([plugin, pluginConfig]) => { if (plugin.hooks.modifyData != null) data = plugin.hooks.modifyData(pluginConfig, data)});
 
                         // Replace title if not set
                         if (!context.codeBlock.props.title) {
@@ -285,7 +398,7 @@ export function expressiveCodePluginResolver(options: ResolverPluginOptions): Ex
                         locations.forEach((location: string) => warningMessage.push(`- ${location}`));
                         warningMessage.push('The reference will be skipped.');
 
-                        process.emitWarning(warningMessage.join('\n'), 'MissingFileReference');
+                        ERROR_HANDLERS[opts.onUnresolvedReferences](warningMessage.join('\n'), 'MissingFileReference');
                     }
                 }
 
