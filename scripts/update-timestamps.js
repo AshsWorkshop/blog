@@ -10,16 +10,7 @@
 const chp = require('node:child_process');
 const fs = require('node:fs');
 const path = require('node:path');
-const yaml = require('yaml');
 const common = require('./common');
-
-// TODO:
-// - Get all changed files from the previous commit (git diff --name-only HEAD HEAD~1)
-// - For each piece of content
-//  - Read file header
-//  - Parse YAML
-//  - Write date and last_update.date
-//  - Write file
 
 /**
  * Updates the header with the given timestamp. The creation time is
