@@ -1,6 +1,5 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import * as yaml from 'yaml';
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
@@ -9,9 +8,16 @@ import type * as Theme from '@docusaurus/theme-classic';
 import type * as ExpressiveCode from 'rehype-expressive-code';
 import rehypeExpressiveCode from 'rehype-expressive-code';
 import * as common from './scripts/common';
+import * as ResolverPlugin from './src/expressive/resolver';
+
+const resolverOptions: ResolverPlugin.ResolverPluginOptions = {
+  remotes: {}
+};
 
 const expressiveCodeOptions: ExpressiveCode.RehypeExpressiveCodeOptions = {
-
+  plugins: [
+    ResolverPlugin.expressiveCodePluginResolver(resolverOptions)
+  ]
 };
 
 /**
