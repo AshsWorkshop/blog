@@ -55,7 +55,10 @@ jobs:
         run: npm ci
 
       - name: Run script
-        run: npm run lock-timestamp git ${{ steps.extract_commit.outputs.start_commit }} ${{ steps.extract_commit.outputs.end_commit }}
+        run: |
+          # TEST
+          git rev-list ${{ steps.extract_commit.outputs.start_commit }}..${{ steps.extract_commit.outputs.end_commit }}
+          npm run lock-timestamp git ${{ steps.extract_commit.outputs.start_commit }} ${{ steps.extract_commit.outputs.end_commit }}
       
       - name: Commit and push branch
         run: |
@@ -65,6 +68,7 @@ jobs:
             git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
 
             # Commit files
+            git add .
             git commit -a -m "chore([skip ci]): Action ${{ github.run_id }} lock blogpost metadata"
             git push -u origin ${{ steps.extract_branch.outputs.branch }}
           fi
