@@ -2,6 +2,9 @@
 title: A Starting Point
 authors:
     - ash
+date: 2026-04-12T00:04:53.000Z
+last_update:
+    date: 2026-04-12T00:04:53.000Z
 ---
 
 Hello, hello! And welcome to the first blog post of Ash's Workshop: a place where I just talk about things that interest me.
