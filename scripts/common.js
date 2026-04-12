@@ -64,7 +64,7 @@ export function modifyContentHeaders(files, pathGetter, modifyHeader) {
         // Write back to output
         fs.writeFileSync(filePath, [
             '---',
-            yaml.stringify(headerYaml).trim(),
+            yaml.stringify(headerYaml, { indent: 4 }).trim(),
             '---',
             data.join('\n')
         ].join('\n'));
