@@ -1,0 +1,70 @@
+name: 'Lock Blogpost Metadata'
+
+on:
+  push:
+    branches: ["main"]
+  
+  workflow_dispatch:
+    inputs:
+      start_commit:
+        description: 'Start commit'
+        required: true
+        type: string
+      end_commit:
+        description: 'End commit'
+        required: true
+        default: 'HEAD'
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  lock_blog_timestamps:
+    name: Lock blogpost timestamps
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Extract branch name
+        id: extract_branch
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        
+      - name: Extract commit info
+        id: extract_commit
+        run: |
+          if [ ${{ github.event_name }} = "push" ]; then
+            # If 'push'
+            echo "start_commit=${{ github.event.before }}" >> $GITHUB_OUTPUT
+            echo "end_commit=${{ github.sha }}" >> $GITHUB_OUTPUT
+          else
+            # Otherwise 'workflow_dispatch'
+            echo "start_commit=${{ inputs.start_commit }}" >> $GITHUB_OUTPUT
+            echo "end_commit=${{ inputs.end_commit }}" >> $GITHUB_OUTPUT
+          fi
+
+      - uses: actions/checkout@v6
+        with:
+          ref: '${{ steps.extract_branch.outputs.branch }}'
+      
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: '.node-version'
+          cache: npm
+      
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run script
+        run: npm run lock-timestamp ${{ steps.extract_commit.outputs.start_commit }} ${{ steps.extract_commit.outputs.end_commit }}
+      
+      - name: Commit and push branch
+        run: |
+          if [ -n "$(git status --porcelain)"" ]; then
+            # Setup user settings
+            git config --global user.name 'github-actions[bot]'
+            git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+            # Commit files
+            git commit -a -m "chore([skip ci]): Action ${{ github.run_id }} lock blogpost metadata"
+            git push -u origin ${{ steps.extract_branch.outputs.branch }}
+          fi
