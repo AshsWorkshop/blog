@@ -57,7 +57,7 @@ jobs:
       - name: Run script
         run: |
           # TEST
-          git rev-list ${{ steps.extract_commit.outputs.start_commit }}..${{ steps.extract_commit.outputs.end_commit }}
+          git log --pretty=format:"%H"
           npm run lock-timestamp git ${{ steps.extract_commit.outputs.start_commit }} ${{ steps.extract_commit.outputs.end_commit }}
       
       - name: Commit and push branch
