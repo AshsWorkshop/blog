@@ -55,7 +55,7 @@ jobs:
         run: npm ci
 
       - name: Run script
-        run: npm run lock-timestamp ${{ steps.extract_commit.outputs.start_commit }} ${{ steps.extract_commit.outputs.end_commit }}
+        run: npm run lock-timestamp git ${{ steps.extract_commit.outputs.start_commit }} ${{ steps.extract_commit.outputs.end_commit }}
       
       - name: Commit and push branch
         run: |
