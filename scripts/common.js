@@ -41,7 +41,7 @@ export function modifyContentHeaders(files, pathGetter, modifyHeader) {
     files.forEach((file) => {
         // Get and validate file path
         const filePath = pathGetter(file);
-        if (filePath == null) return;
+        if (filePath == null || !fs.existsSync(filePath)) return;
 
         // Read header and data
         const header = [];
