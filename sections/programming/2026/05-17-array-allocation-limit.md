@@ -2,9 +2,6 @@
 title: Determining Java's Max Array Allocation Size
 authors:
     - ash
-tags:
-    - programming
-    - minecraft
 date: 2026-05-17T18:53:30.000Z
 last_update:
     date: 2026-05-17T18:53:30.000Z
