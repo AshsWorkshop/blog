@@ -42,12 +42,12 @@ jobs:
             echo "end_commit=${{ inputs.end_commit }}" >> $GITHUB_OUTPUT
           fi
 
-      - uses: AshsWorkshop/actions/checkout@8ea65337160cab4672107cb767eff9b122b7b119 # main
+      - uses: AshsWorkshop/actions/checkout@642654b8b40af8852255c1532e040378c42199aa # main
         with:
           ref: '${{ steps.extract_branch.outputs.branch }}'
           fetch-depth: 0
       
-      - uses: AshsWorkshop/actions/setup-node@8ea65337160cab4672107cb767eff9b122b7b119 # main
+      - uses: AshsWorkshop/actions/setup-node@642654b8b40af8852255c1532e040378c42199aa # main
         with:
           node-version-file: '.node-version'
       
