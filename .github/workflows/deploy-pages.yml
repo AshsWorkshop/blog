@@ -14,9 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: AshsWorkshop/actions/checkout@8ea65337160cab4672107cb767eff9b122b7b119 # main
+      - uses: AshsWorkshop/actions/checkout@642654b8b40af8852255c1532e040378c42199aa # main
 
-      - uses: AshsWorkshop/actions/setup-node@8ea65337160cab4672107cb767eff9b122b7b119 # main
+      - uses: AshsWorkshop/actions/setup-node@642654b8b40af8852255c1532e040378c42199aa # main
         with:
           node-version-file: '.node-version'
 
@@ -27,7 +27,7 @@ jobs:
         run: npm run build
 
       - name: Upload Build Artifact
-        uses: AshsWorkshop/actions/upload-pages-artifact@8ea65337160cab4672107cb767eff9b122b7b119 # main
+        uses: AshsWorkshop/actions/upload-pages-artifact@642654b8b40af8852255c1532e040378c42199aa # main
   
   deploy:
     name: Deploy to GitHub Pages
@@ -45,4 +45,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: AshsWorkshop/actions/deploy-pages@8ea65337160cab4672107cb767eff9b122b7b119 # main
+        uses: AshsWorkshop/actions/deploy-pages@642654b8b40af8852255c1532e040378c42199aa # main
