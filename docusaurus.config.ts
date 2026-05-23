@@ -7,6 +7,7 @@ import type * as Blog from '@docusaurus/plugin-content-blog';
 import type * as Theme from '@docusaurus/theme-classic';
 import type * as ExpressiveCode from 'rehype-expressive-code';
 import rehypeExpressiveCode from 'rehype-expressive-code';
+import { pluginLink } from 'expressive-code-links';
 import * as common from './scripts/common';
 import * as ResolverPlugin from './src/expressive/resolver';
 
@@ -16,7 +17,8 @@ const resolverOptions: ResolverPlugin.ResolverPluginOptions = {
 
 const expressiveCodeOptions: ExpressiveCode.RehypeExpressiveCodeOptions = {
   plugins: [
-    ResolverPlugin.expressiveCodePluginResolver(resolverOptions)
+    ResolverPlugin.expressiveCodePluginResolver(resolverOptions),
+    pluginLink()
   ]
 };
 

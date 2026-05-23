@@ -29,6 +29,17 @@ export function parseYaml(...paths) {
 }
 
 /**
+ * Reads and splits the file into lines according to its path separator.
+ * 
+ * @param {string} filePath The path of the file to read.
+ * @returns {Array<string>} The file text separated by line.
+ */
+function readAndSplitFile(filePath) {
+    const fileText = fs.readFileSync(filePath, { encoding: 'utf-8' });
+    return fileText.split(fileText.indexOf('\r') !== -1 ? '\r\n' : '\n');
+}
+
+/**
  * Modifies the header of a content file.
  * 
  * @param {T[]} files The files to read the data of.
@@ -47,7 +58,7 @@ export function modifyContentHeaders(files, pathGetter, modifyHeader) {
         const header = [];
         const data = [];
         let format = 0;
-        for (const line of fs.readFileSync(filePath, { encoding: 'utf-8' }).split('\n')) {
+        for (const line of readAndSplitFile(filePath)) {
             if (line.startsWith('---')) {
                 format++;
             } else if (format === 1) {
