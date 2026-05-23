@@ -2,6 +2,9 @@
 title: A Redundant Count Comparison in AbstractContainerMenu
 authors:
     - ash
+date: 2026-05-23T19:59:03.000Z
+last_update:
+    date: 2026-05-23T19:59:03.000Z
 ---
 
 Did you know that when shift-clicking a stack within a GUI like a chest or dispenser, the stack will move from one inventory to the other? It's a feature that's been in the game since [b1.5](https://minecraft.wiki/w/Java_Edition_Beta_1.5) and hasn't really changed much.
