@@ -5,6 +5,9 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import type * as Blog from '@docusaurus/plugin-content-blog';
 import type * as Theme from '@docusaurus/theme-classic';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import type { Options as KatexOptions } from 'rehype-katex';
 import type * as ExpressiveCode from 'rehype-expressive-code';
 import rehypeExpressiveCode from 'rehype-expressive-code';
 import { pluginLink } from 'expressive-code-links';
@@ -13,6 +16,10 @@ import * as ResolverPlugin from './src/expressive/resolver';
 
 const resolverOptions: ResolverPlugin.ResolverPluginOptions = {
   remotes: {}
+};
+
+const katexOptions: KatexOptions = {
+  output: 'mathml'
 };
 
 const expressiveCodeOptions: ExpressiveCode.RehypeExpressiveCodeOptions = {
@@ -61,8 +68,11 @@ function constructBlog(params?: BlogParams): Blog.Options {
 
     postsPerPage: 20,
 
-    remarkPlugins: [],
+    remarkPlugins: [
+      [remarkMath, {}]
+    ],
     rehypePlugins: [
+      [rehypeKatex, katexOptions],
       [rehypeExpressiveCode, expressiveCodeOptions]
     ],
     recmaPlugins: [],
