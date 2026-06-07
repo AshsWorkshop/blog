@@ -191,7 +191,7 @@ public ItemStack quickMoveStack(int slotIndex) {
 }
 ```
 
-> Some IDEs may fail to open the file as the obfuscated name of the class `do` is a keyword. I got around this in IntelliJ IDEA by right-clicking the class and selected 'Open in Right Split'.
+> Some IDEs may fail to open the file as the obfuscated name of the class `do` is a keyword. I got around this in IntelliJ IDEA by right-clicking the class and selecting 'Open in Right Split'.
 
 Now you might be wondering why I'm showing the `AbstractContainerMenu` method instead of the `CraftingMenu` override. Well, it's because `CraftingMenu` (or `ie` obfuscated) didn't override `quickMoveStack` when it was first implemented. Nowadays, all menus have to implement `quickMoveStack` as an abstract method, much different than before.
 

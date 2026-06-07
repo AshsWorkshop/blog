@@ -120,7 +120,7 @@ Exception in thread "main" java.lang.OutOfMemoryError: Required array length 214
         at java.base/java.util.ArrayList.add(ArrayList.java:497)
 ```
 
-Same OOM, but different reasoning. Though, the OpenJ9 error doesn't make much sense since it implies it wold let you create a larger array if it wasn't limited to a signed integer.
+Same OOM, but different reasoning. Though, the OpenJ9 error doesn't make much sense since it implies it would let you create a larger array if it wasn't limited to a signed integer.
 
 As for why they allow allocation up to those values, I have no idea. After asking around, someone mentioned that the Java Virtual Machine Specification (JVMS) defines that the first two entries could be taken up by the array's length followed by its data type, but I was unable to find such a explanation within the doc. Most likely, it's just up to the JVM to choose how arrays are implemented. After all, "the soft maximum value is chosen conservatively so as to be smaller than any implementation limit that is likely to be encountered." (From `ArraysSupport.SOFT_MAX_ARRAY_LENGTH`)
 
