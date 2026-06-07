@@ -90,7 +90,7 @@ Well, sort of. There's a slight hiccup to this reasoning. According to the Minec
 
 This means that we could potentially be dealing with some kind of mislabeling. Of course, there is some evidence that `0.0.13a_03` can be the first obfuscated version. Looking through the channel logs from the [#minecraft IRC server by Testvan](https://archive.org/details/Testvan-Minecraft-IRC-logs), we can see some supporting conversation from May 25th, 2009:
 
-> - \[04:22] \<taodih_away> then last question , for developers *make sure you licence it then* can we expand the game as you say you only used 17/256 of th- e tilesets
+> - \[04:22] \<taodih_away> then last question , for developers *make sure you licence it then* can we expand the game as you say you only used 17/256 of the tilesets
 > - \[04:22] \<\@Notch> that's a really good idea
 > - \[04:22] * failgoat is now known as Stargoat
 > - \[04:22] \<\@Notch> charge less for it when it's beta, then more when it's done (but you still get the full version if you bought at beta)
