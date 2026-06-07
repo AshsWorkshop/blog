@@ -90,50 +90,50 @@ Well, sort of. There's a slight hiccup to this reasoning. According to the Minec
 
 This means that we could potentially be dealing with some kind of mislabeling. Of course, there is some evidence that `0.0.13a_03` can be the first obfuscated version. Looking through the channel logs from the [#minecraft IRC server by Testvan](https://archive.org/details/Testvan-Minecraft-IRC-logs), we can see some supporting conversation from May 25th, 2009:
 
-> [04:22] <taodih_away> then last question , for developers *make sure you licence it then* can we expand the game as you say you only used 17/256 of the tilesets
-> [04:22] <@Notch> that's a really good idea
-> [04:22] * failgoat is now known as Stargoat
-> [04:22] <@Notch> charge less for it when it's beta, then more when it's done (but you still get the full version if you bought at beta)
-> [04:23] <taodih_away> maby an extra payment for the developers as the get the sourcecode
-> [04:23] <mezo> yeah
-> [04:23] <@Notch> taodih_away: I'm very much considering modding support. =)
-> [04:23] <mezo> people feel inclined to buy the beta that way
-> [04:23] <taodih_away> awsome 
-> [04:23] <pyl> oh shit yes, modding support
-> [04:23] <@Notch> it'd probably be mostly for multiplayer, though, since that's where people run servers
-> [04:23] <@Notch> so you could set up a server with custom textures and blocks, possibly. =)
-> [04:23] <pyl> maybe i can finally have my earthworm mode :)
-> [04:23] <vdgmprgrmr> That'd be cool.
-> [04:23] <taodih_away> lol
-> [04:24] <taodih_away> hmmmmmi actuly meant real total modding 
-> [04:24] <MCXD> I'd probably buy it too
-> [04:24] * neutrinka (rafalk42@tk202.azylnet.com) has joined #minecraft
-> [04:24] <taodih_away> that you actuly get the sourcecode 
-> [04:25] <taodih_away> me to but i'll need the money first
-> [04:25] <vdgmprgrmr> ... That might be cool as well.
-> [04:25] <@Notch> I'm not going to opensource it or sell the source code
-> [04:25] <vdgmprgrmr> Yeah, expected that.
-> [04:25] <@Notch> if people reverse-engineer and so on, I can't (and won't! especially if they've paid me :D) stop them
-> [04:25] <@Notch> but as soon as you release the source code, you kinda encourage it, and I don't want to do that
-> [04:25] <taodih_away> ooooh 
-> [04:25] <taodih_away> ok i'll need to study on java xD 
-> [04:25] <@Notch> however, once sales starts dwindling, I could definitely see myself opensourcing it
+> - \[04:22] \<taodih_away> then last question , for developers *make sure you licence it then* can we expand the game as you say you only used 17/256 of th- e tilesets
+> - \[04:22] \<\@Notch> that's a really good idea
+> - \[04:22] * failgoat is now known as Stargoat
+> - \[04:22] \<\@Notch> charge less for it when it's beta, then more when it's done (but you still get the full version if you bought at beta)
+> - \[04:23] \<taodih_away> maby an extra payment for the developers as the get the sourcecode
+> - \[04:23] \<mezo> yeah
+> - \[04:23] \<\@Notch> taodih_away: I'm very much considering modding support. =)
+> - \[04:23] \<mezo> people feel inclined to buy the beta that way
+> - \[04:23] \<taodih_away> awsome
+> - \[04:23] \<pyl> oh shit yes, modding support
+> - \[04:23] \<\@Notch> it'd probably be mostly for multiplayer, though, since that's where people run servers
+> - \[04:23] \<\@Notch> so you could set up a server with custom textures and blocks, possibly. =)
+> - \[04:23] \<pyl> maybe i can finally have my earthworm mode :)
+> - \[04:23] \<vdgmprgrmr> That'd be cool.
+> - \[04:23] \<taodih_away> lol
+> - \[04:24] \<taodih_away> hmmmmmi actuly meant real total modding 
+> - \[04:24] \<MCXD> I'd probably buy it too
+> - \[04:24] * neutrinka has joined #minecraft
+> - \[04:24] \<taodih_away> that you actuly get the sourcecode 
+> - \[04:25] \<taodih_away> me to but i'll need the money first
+> - \[04:25] \<vdgmprgrmr> ... That might be cool as well.
+> - \[04:25] \<\@Notch> I'm not going to opensource it or sell the source code
+> - \[04:25] \<vdgmprgrmr> Yeah, expected that.
+> - \[04:25] \<\@Notch> if people reverse-engineer and so on, I can't (and won't! especially if they've paid me :D) stop them
+> - \[04:25] \<\@Notch> but as soon as you release the source code, you kinda encourage it, and I don't want to do that
+> - \[04:25] \<taodih_away> ooooh 
+> - \[04:25] \<taodih_away> ok i'll need to study on java xD
+> - \[04:25] \<\@Notch> however, once sales starts dwindling, I could definitely see myself opensourcing it
 
 This conversation, from taodih_away "\[maybe] an extra payment for the developers as the get the sourcecode" and @Notch "I'm not going to opensource it or sell the source code' / 'if people reverse-engineer and so on, I can't (and won't! especially if they've paid me :D) stop them" indicate that, at this point in time, the Minecraft source code was already obfuscated. There's even further proof from May 29th, 2009:
 
-> [05:52] <taodih> i hope the n error isint just because of that o-O 
-> [05:52] <@Notch> the n error is caused by the loaded map having a width and height of 0
-> [05:53] <taodih> oh ok 
-> [05:53] <@Notch> levels saved when there was some level file version problem (ie yesterday? the day before) could get corrupted like that
-> [05:53] <taodih> cunk when did you last saved??? o_O 
-> [05:53] <@Notch> the sad thing is that the actual level data is null as well, so I can't recompute the level data for that
-> [05:53] <taodih> maby it was because of new updates 
-> [05:53] <@Notch> it was a stupid mistake of mine
-> [05:54] <@Notch> I had changed to using the built in serialization in java, and it worked great locally
-> [05:54] <Cunk> i got the error right after i made the level.  the same night.  it wasn't something that happened a day or two later
-> [05:54] <@Notch> but I forgot that I obfuscate the game before uploading it, and that broke serialization between versions
-> [05:54] <@Notch> yes, I updated the client many times that night
-> [05:54] <Cunk> ah, ok.  then i guess it could have been a version thing
+> - \[05:52] \<taodih> i hope the n error isint just because of that o-O 
+> - \[05:52] \<\@Notch> the n error is caused by the loaded map having a width and height of 0
+> - \[05:53] \<taodih> oh ok 
+> - \[05:53] \<\@Notch> levels saved when there was some level file version problem (ie yesterday? the day before) could get corrupted like that
+> - \[05:53] \<taodih> cunk when did you last saved??? o_O 
+> - \[05:53] \<\@Notch> the sad thing is that the actual level data is null as well, so I can't recompute the level data for that
+> - \[05:53] \<taodih> maby it was because of new updates 
+> - \[05:53] \<\@Notch> it was a stupid mistake of mine
+> - \[05:54] \<\@Notch> I had changed to using the built in serialization in java, and it worked great locally
+> - \[05:54] \<Cunk> i got the error right after i made the level.  the same night.  it wasn't something that happened a day or two later
+> - \[05:54] \<\@Notch> but I forgot that I obfuscate the game before uploading it, and that broke serialization between versions
+> - \[05:54] \<\@Notch> yes, I updated the client many times that night
+> - \[05:54] \<Cunk> ah, ok.  then i guess it could have been a version thing
 
 @Notch "but I forgot that I obfuscate the game before uploading it, and that broke serialization between versions" indicates that the game was obfuscated prior to May 29th, 2009.
 
