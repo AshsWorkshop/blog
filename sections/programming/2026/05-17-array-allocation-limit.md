@@ -4,7 +4,7 @@ authors:
     - ash
 date: 2026-05-17T18:53:30.000Z
 last_update:
-    date: 2026-05-17T18:53:30.000Z
+    date: 2026-06-07T16:48:58.000Z
 ---
 
 For those unfamiliar, the Minecraft modding community just released a patch on May 11th, 2026 for a [Memory Allocation with Excessive Size Value](https://cwe.mitre.org/data/definitions/789.html) exploit when decoding a network packet.

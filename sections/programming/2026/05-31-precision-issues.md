@@ -4,7 +4,7 @@ authors:
     - ash
 date: 2026-05-31T04:39:30.000Z
 last_update:
-    date: 2026-05-31T04:39:30.000Z
+    date: 2026-06-07T19:01:15.000Z
 ---
 
 How do you know whether two expressions are equivalent?
