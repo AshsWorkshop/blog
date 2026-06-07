@@ -2,6 +2,9 @@
 title: Why 0.1 + 0.2 = 0.30000000000000004
 authors:
     - ash
+date: 2026-05-31T04:39:30.000Z
+last_update:
+    date: 2026-05-31T04:39:30.000Z
 ---
 
 How do you know whether two expressions are equivalent?
