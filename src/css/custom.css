@@ -29,10 +29,17 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 } */
 
+/* Add missing margin to bottom of code block. */
 .expressive-code {
   margin-bottom: 20px;
 }
 
-math {
+/* Add margin to bottom of math block. */
+.katex > math {
   margin-bottom: 20px;
+}
+
+/* Remove margin from any inlined elements.  */
+p > .katex > math {
+  margin-bottom: 0px;
 }
