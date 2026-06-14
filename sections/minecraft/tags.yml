@@ -1,0 +1,6 @@
+neoforge:
+  label: NeoForge
+  description: Minecraft mods with the NeoForge ecosystem
+fabric:
+  label: Fabric
+  description: Minecraft mods with the Fabric ecosystem

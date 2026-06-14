@@ -30,7 +30,21 @@ fs.readdirSync(common.MAIN_BLOG_PATH, { withFileTypes: true, encoding: 'utf-8' }
     
     // Merge section tags
     if (fs.existsSync(sectionTagsPath = path.join(sectionPath, BLOG_TAGS_FILE))) {
-        Object.assign(tags, common.parseYaml(sectionTagsPath));
+        const sectionTags = common.parseYaml(sectionTagsPath);
+        if (sectionTags != null) {
+            // For each existing tag in a section, add section path prefix to permalink
+            for (const [tagId, tagData] of Object.entries(sectionTags)) {
+                let permalink = `/${sectionId.name}`;
+                if ('permalink' in tagData) {
+                    permalink += tagData['permalink'];
+                } else {
+                    permalink += `/${tagId}`;
+                }
+                tagData['permalink'] = permalink;
+            }
+
+            Object.assign(tags, sectionTags);
+        }
     }
 
     // Add main section tag
