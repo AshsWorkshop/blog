@@ -118,7 +118,7 @@ See, before Minecraft had an actual version number, there were four versions (`m
 > - (12:08:29) notch: awesome. urls pm'd.
 > - (12:08:43) notch: let me know if it works, and if it does, how well it works
 
-::: note
+:::note[Parts that don't line up with the wiki]
 At the time of writing, only dock and fartron are mentioned as the users to got the URL for testing on the [Minecraft wiki](https://minecraft.wiki/w/Java_Edition_Classic_mc-161607). Jrsquee seems to have been left out since they did not have Java downloaded at the time when they were originally linked the game, starting testing later during `mc-161625`:
 
 > - (12:26:46) Jrsquee: notch
