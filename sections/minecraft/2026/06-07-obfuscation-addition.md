@@ -189,3 +189,9 @@ Two, the versions in the Minecraft launcher are not the "true" versions, and are
 Unfortunately, there's not much evidence supporting either claim enough to make any definitive statements. It's all guesswork as all other versions are lost as far as we know. Of course this may change in the future, so who knows?
 
 But for right now, the first version Minecraft was obfuscated is [Classic 0.0.12a_03 (or `c0.0.12a_03`)](https://minecraft.wiki/w/Java_Edition_Classic_0.0.12a_03), with one big asterisk.
+
+:::note
+
+[An addendum to this post was released on June, 20th, 2026](./06-20-obfuscation-addendum.md).
+
+:::
