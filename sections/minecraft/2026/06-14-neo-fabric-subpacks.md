@@ -7,7 +7,7 @@ tags:
     - fabric
 date: 2026-06-14T15:03:04.000Z
 last_update:
-    date: 2026-06-14T15:03:04.000Z
+    date: 2026-06-20T14:24:13.000Z
 ---
 
 Minecraft has many mod loaders that allow players to load mods into their game, as the name implies.
