@@ -2,6 +2,9 @@
 title: Apparently, Minecraft was Obfuscated Earlier
 authors:
     - ash
+date: 2026-06-20T14:24:01.000Z
+last_update:
+    date: 2026-06-20T14:24:01.000Z
 ---
 
 So, I tried asking a large language model when Minecraft was obfuscated again.
