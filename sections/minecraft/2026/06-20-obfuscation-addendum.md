@@ -4,7 +4,7 @@ authors:
     - ash
 date: 2026-06-20T14:24:01.000Z
 last_update:
-    date: 2026-06-20T16:44:02.000Z
+    date: 2026-06-27T09:15:50.000Z
 ---
 
 So, I tried asking a large language model when Minecraft was obfuscated again.

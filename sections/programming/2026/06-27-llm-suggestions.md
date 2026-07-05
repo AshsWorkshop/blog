@@ -2,6 +2,9 @@
 title: Large Language Models Could be Much Better
 authors:
     - ash
+date: 2026-06-27T09:15:40.000Z
+last_update:
+    date: 2026-06-27T09:15:40.000Z
 ---
 
 So I've been talking quite a bit about large language models (LLMs), mostly because nearly everyone I'm around tend to praise it as gospel.
