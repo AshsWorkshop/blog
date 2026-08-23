@@ -2,6 +2,9 @@
 title: So it's been a while
 authors:
     - ash
+date: 2026-08-23T17:29:35.000Z
+last_update:
+    date: 2026-08-23T17:29:35.000Z
 ---
 
 So, it's been a while. Sorry about that.
