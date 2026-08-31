@@ -4,7 +4,7 @@ authors:
     - ash
 date: 2026-06-07T19:01:01.000Z
 last_update:
-    date: 2026-08-23T17:29:47.000Z
+    date: 2026-08-31T00:47:08.000Z
 ---
 
 Large language models like to lie, a lot.

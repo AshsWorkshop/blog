@@ -2,6 +2,9 @@
 title: A Random Idea
 authors:
     - ash
+date: 2026-08-31T00:47:00.000Z
+last_update:
+    date: 2026-08-31T00:47:00.000Z
 ---
 
 I've been recently thinking about a weird idea. Not weird as in something strange, but as in a challenge of 'why overcomplicate it'?
